@@ -87,12 +87,12 @@
 
 <section>
 <h2>Workshop with OSGeoLive</h2>
-OSGeoLive 14.0 (July 2021)
+OSGeoLive 14.0 "Malena" (May 2021)
  
     <p>
       <ul>
         <li><a href="http://live.osgeo.org" target="_blank">http://live.osgeo.org</a></li>
-        <li>Download Data & Presentation <a href="http://trac.osgeo.org/osgeolive/wiki/Live_GIS_Workshop_Install" target="_blank">http://trac.osgeo.org/osgeolive/wiki/Live_GIS_Workshop_Install</a></li>
+        <li>Download Data & Presentation <small><a href="http://trac.osgeo.org/osgeolive/wiki/Live_GIS_Workshop_Install" target="_blank">http://trac.osgeo.org/osgeolive/wiki/Live_GIS_Workshop_Install</a></small></li>
       </ul>
     </p>
 <img src="img/foss4g2021/osgeolive_menu.png" height="300">       
@@ -105,7 +105,7 @@ OSGeoLive 14.0 (July 2021)
 <section>
 <h2>What is a SDI?</h2>
 <p>
-A spatial data infrastructure (SDI) is a data infrastructure 
+"A spatial data infrastructure (SDI) is a data infrastructure 
 implementing a framework of geographic data, metadata, 
 users and tools that are interactively connected in order to 
 use spatial data in an efficient and flexible way. Another 
@@ -582,7 +582,7 @@ scripts
       <ul>  
         <li>Menu → Project → Project properties → OWS Server</li>
         <li>Name and title, extent, layer access (make sure you saved the password for your database access)</li>
-        <li>GetCapabilities-Request <br><a href="http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/home/user/service_wms.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" target="_blank">http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/home/user/service_wms.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities</a></li></li>
+        <li>GetCapabilities-Request <br><small><a href="http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/home/user/service_wms.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" target="_blank">http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/home/user/service_wms.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities</a></small></li></li>
         
       </ul>
     </p>
@@ -614,10 +614,11 @@ scripts
   <p>
       <ul>  
         <li>
-            <a href="http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" target="_blank">http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities</a></li>
-        <li><a href="http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0">http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0</a></li>
-        <li>Argentina</li>
-        
+        <small><a href="http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" target="_blank">http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities</a></small></br></br></li>
+        <li><small><a href="http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0">http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0</a></small></br></br></li>
+        <li><small><a href="https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities" target="_blank">https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities</small></li>
+        <li><small>IDERA Argentina <a href="https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302" target="_blank">https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302</a></small></li>
+ 
       </ul>
     </p>
 </section> 
@@ -657,18 +658,35 @@ scripts
     <ul> 
         <li>Copy paste leaflet files from /var/www → desktop</li>
         <li>Fix libraries URLs</li>
-        <li>Add code before < / script></li>
+        <li>Fix coordinates to Buenos Aires -34.581619,-58.394002</li>
     </ul>
     <p>
         <pre><code class="sql">
-// define rectangle geographical bounds
-var bounds = [[43.7,20.0], [48.3,29.7]];
+        var map = L.map('map').setView([-34.581619,-58.394002], 15);
 
-// create an orange rectangle
-L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{}).addTo(map);
+        //In case we are offline, start TileStache to get a base layer
+        L.tileLayer('http://localhost:8012/example/{z}/{x}/{y}.png',{}).addTo(map);
 
-// zoom the map to the rectangle bounds
-map.fitBounds(bounds);
+        var marker = L.marker([-34.581619,-58.394002]).addTo(map);            
+
+        var circle = L.circle([-34.585619,-58.395002], 250, {
+           color: 'red',
+           fillColor: '#f03',
+           fillOpacity: 0.5
+        }).addTo(map);
+        
+        
+        var polygon = L.polygon([
+           [-34.585619,-58.394002],
+           [-34.587619,-58.398002],
+           [-34.589619,-58.396002]
+        ]).addTo(map);
+        
+        var popup = L.popup()
+           .setLatLng([-34.581619,-58.394002])
+           .setContent("FOSS4G 2021 is here this year!")
+           .openOn(map);
          </code></pre>
     </p>
 
@@ -679,6 +697,7 @@ map.fitBounds(bounds);
   <p>    </p>
     <ul> 
         <li>Add WMS service
+        <li>Add your QGIS server WMS to leaflet
     </ul>
     <p>
         <pre><code class="sql">            
@@ -715,8 +734,14 @@ layers: 'omc:ro_admin_gr_colegii_sen'
 
 <section>
     <h2>Exercise 9: Load WMS in Mapbender</h2>
-        <li>Load your QGIS WMS and some other WMS in Mapbender</li>
-        <li>
+    <ul>
+        <li>Load your QGIS WMS and some other WMS in Mapbender</br></br></li>
+        <li><small><a href="http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities" target="_blank">http://localhost/cgi-bin/qgis_mapserv.fcgi?map=/usr/local/share/qgis/QGIS-NaturalEarth-Example.qgz&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities</a></small></br></br></li>
+        <li><small><a href="http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0">http://osm-demo.wheregroup.com/service?REQUEST=GetCapabilities&Service=WMS&Version=1.3.0</a></small></br></br></li>
+        <li><small><a href="https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities" target="_blank">https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities</small></li>
+        <li><small>IDERA Argentina <a href="https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302" target="_blank">https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302</a></small></li>
+ 
+      </ul>
       </ul>
     </p>
 </section> 
@@ -728,9 +753,9 @@ layers: 'omc:ro_admin_gr_colegii_sen'
         <li>Your application should start with the extent of Buenos Aires</li>
         <li>Copy Application mapbender_user and rename it to FOSS4G</li>
         <li>Switch to Layout → map-Element and set SRS EPSG:4326</li>
-        <li>Modify MAX EXTENT to Argentina lower left -180 -90 – upper right 180 90</li>
-        <li>Modify Start Extent Buenos Aires lower left -59.537 -35.067 upper right -57.8 -34.247466</li>
-        <li>Modify the scales to: 100000000,50000000,10000000,5000000,1000000,500000,100000,50000,25000,10000,7500,5000,2500,1000,500 </li>
+        <li>Modify MAX EXTENT to Argentina </br>lower left -180 -90 </br>upper right 180 90</li>
+        <li>Modify Start Extent Buenos Aires </br>lower left -59.537 -35.067 </br>upper right -57.8 -34.247466</li>
+        <li>Modify the scales to: </br><small>100000000,50000000,10000000,5000000,1000000,500000,100000,50000,25000,10000,7500,5000,2500,1000,500</small> </li>
       </ul>
     </p>
 </section> 
@@ -749,8 +774,8 @@ layers: 'omc:ro_admin_gr_colegii_sen'
         <li>Your application should show your QGIS WMS and some other external WMS</li>
         <li>Go to Tab Layerset</li>
         <li>Add WMS via +</li>
-        <li><a href="https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities" target="_blank">https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities</a></li>
-      <li>IDERA/Geoservicios Services: <a href="https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302" target="_blank">https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302</a></li>
+        <li><small><a href="https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities" target="_blank">https://sedac.ciesin.columbia.edu/geoserver/other/wms?service=wms&request=getcapabilities</small></a></li>
+      <li>IDERA/Geoservicios Services: <small><a href="https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302" target="_blank">https://www.idera.gob.ar/index.php?option=com_content&view=article&id=335:geoservicios&catid=33:services&Itemid=302</a></small></li>
     </ul>
   </p>
 </section> 
@@ -793,15 +818,14 @@ layers: 'omc:ro_admin_gr_colegii_sen'
 <section>
 <h2>Exercise 12: Add your new QGIS WMS to GeoNode or GeoNetwork</h2>
     <ul> 
-        <li>Open GeoNode</li>
-        <li>Login: admin/admin</li>
+        <li>Open GeoNode and login via admin/admin</li>
         <li>Add a new Metadata entry for you WMS</li>
-        <li>Follow the quickstart: <a href="https://live.osgeo.org/en/quickstart/geonode_quickstart.html" target="_blank">https://live.osgeo.org/en/quickstart/geonode_quickstart.html</a></li>
+        <li>Follow the quickstart: <small><a href="https://live.osgeo.org/en/quickstart/geonode_quickstart.html" target="_blank">https://live.osgeo.org/en/quickstart/geonode_quickstart.html</a></small></li>
         
       </ul>
     </p>
        <p>
-        <img src="img/foss4g2021/geonode.png" height="200">           
+        <img src="img/foss4g2021/geonode.png" height="250">           
     </p>  
 </section> 
 
